@@ -52,7 +52,19 @@ class IssueFilter extends React.Component {
       return (
         <>
         {/****** Q1: Start Coding here. ******/}
-
+        <View>
+          <Text>Filter Issues:</Text>
+          <TextInput
+            placeholder="Status (e.g., Open)"
+            onChangeText={(text) => console.log(`Status Filter: ${text}`)}
+          />
+          <TextInput
+            placeholder="Effort >= (e.g., 5)"
+            keyboardType="numeric"
+            onChangeText={(text) => console.log(`Effort Filter: ${text}`)}
+          />
+          <Button title="Apply Filter" onPress={() => console.log("Filter Applied")} />
+        </View>
         {/****** Q1: Code ends here ******/}
         </>
       );
@@ -197,6 +209,7 @@ export default class IssueList extends React.Component {
     return (
     <>
     {/****** Q1: Start Coding here. ******/}
+    <IssueFilter />
     {/****** Q1: Code ends here ******/}
 
 
