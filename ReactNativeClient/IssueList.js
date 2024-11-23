@@ -19,7 +19,7 @@ function jsonDateReviver(key, value) {
 
 async function graphQLFetch(query, variables = {}) {
   try {
-    const response = await fetch('http://192.168.10.122:3000/graphql', {
+    const response = await fetch('http://10.0.2.2:3000/graphql', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ query, variables }),
@@ -216,41 +216,38 @@ class BlackList extends React.Component {
   constructor() {
     super();
     this.handleSubmit = this.handleSubmit.bind(this);
-    /****** Q4: Start Coding here. Create State to hold inputs ******/
+    /****** Q4: Start Coding here. Create State to hold inputs******/
     this.state = {
       name: '',
-      reason: '',
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     /****** Q4: Code Ends here. ******/
   }
-  /****** Q4: Start Coding here. Add functions to hold/set state input based on changes in TextInput ******/
+  /****** Q4: Start Coding here. Add functions to hold/set state input based on changes in TextInput******/
   handleInputChange(field, value) {
     this.setState({ [field]: value });
-  }
   /****** Q4: Code Ends here. ******/
+  }
 
   async handleSubmit() {
-    /****** Q4: Start Coding here. Create an issue from state variables and issue a query. Also, clear input field in front-end ******/
-    const { name, reason } = this.state;
+    /****** Q4: Start Coding here. Create an issue from state variables and issue a query. Also, clear input field in front-end******/
+    const { name } = this.state;
 
-    if (!name || !reason) {
-      Alert.alert('Error', 'Please fill in all fields.');
+    if (!name) {
+      Alert.alert('Error', 'Please fill in the name field.');
       return;
     }
 
-    const query = `mutation addToBlacklist($name: String!, $reason: String!) {
-      addToBlacklist(name: $name, reason: $reason) {
-        id
-      }
+    const query = `mutation myaddToBlacklist($newname: String!) {
+      addToBlacklist(nameInput: $newname)
     }`;
 
-    const variables = { name, reason };
+    const variables = { newname: name };
     const data = await graphQLFetch(query, variables);
 
     if (data) {
       Alert.alert('Success', 'Owner added to blacklist.');
-      this.setState({ name: '', reason: '' });
+      this.setState({ name: '' });
     }
     /****** Q4: Code Ends here. ******/
   }
@@ -258,25 +255,20 @@ class BlackList extends React.Component {
   render() {
     return (
       <View>
-        {/****** Q4: Start Coding here. Create TextInput field, populate state variables. Create a submit button, and on submit, trigger handleSubmit. *******/}
+      {/****** Q4: Start Coding here. Create TextInput field, populate state variables. Create a submit button, and on submit, trigger handleSubmit.*******/}
         <TextInput
           placeholder="Owner Name"
           value={this.state.name}
           onChangeText={(text) => this.handleInputChange('name', text)}
           style={styles.input}
         />
-        <TextInput
-          placeholder="Reason"
-          value={this.state.reason}
-          onChangeText={(text) => this.handleInputChange('reason', text)}
-          style={styles.input}
-        />
         <Button title="Add to Blacklist" onPress={this.handleSubmit} />
-        {/****** Q4: Code Ends here. ******/}
+      {/****** Q4: Code Ends here.******/}
       </View>
     );
   }
 }
+
 
 export default class IssueList extends React.Component {
   constructor() {
